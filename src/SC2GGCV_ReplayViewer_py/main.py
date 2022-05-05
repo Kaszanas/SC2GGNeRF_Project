@@ -6,6 +6,10 @@ from sc2.main import run_replay
 # from sc2.data import Race
 # from sc2.bot_ai import BotAI
 
+
+# TODO: Sprawdzic czy jednostka jest "zywa" -> wlaczenie nagrywania
+# TODO: Kamera -> rotowanie i przyblizanie
+
 class ObserverBot(ObserverAI):
     """
     A replay bot that can run replays.
