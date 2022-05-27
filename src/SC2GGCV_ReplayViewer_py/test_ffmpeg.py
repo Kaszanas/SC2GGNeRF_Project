@@ -28,7 +28,7 @@ def record_vid(name):
 
 
 
-record_vid("Steam")
+# record_vid("Steam")
 
 
 
