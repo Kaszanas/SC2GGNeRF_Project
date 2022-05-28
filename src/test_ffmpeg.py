@@ -2,10 +2,8 @@ import os
 import glob
 import pyautogui
 
-
 for x in pyautogui.getAllWindows():
     print(x)
-
 
 x = 0
 
