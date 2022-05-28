@@ -1,9 +1,6 @@
 from sc2.observer_ai import ObserverAI
-from sc2.client import Client
-from sc2.position import Point2
-from sc2.unit import Unit
 
-from src.utils import find_window
+from utils import find_window
 
 
 class ObserverBot(ObserverAI):
@@ -25,7 +22,7 @@ class ObserverBot(ObserverAI):
         self.center_precision = 5
 
         # Center camera:
-        self.client.obs_move_camera(self.game_info.map_center)
+        # self.client.obs_move_camera(self.game_info.map_center)
 
         # Attempting to find a window that contains a specific substring:
         self.found_window, self.window = find_window(title="StarCraft II")
@@ -53,18 +50,18 @@ class ObserverBot(ObserverAI):
                     center_unit_id = unit_id
 
             # Center camera on the unit:
-            self.client.obs_move_camera(units[center_unit_id].position)
+            # self.client.obs_move_camera(units[center_unit_id].position)
             print("Centered camera")
 
             # Start recording:
             print("Started Recording")
 
-    async def on_unit_created(self, unit):
-        print(f"Unit created: {unit}")
-        print(f"Unit position: {unit.position}")
-        print("*** START RECORDING ***")
-        self.client.obs_move_camera(unit.position)
+    # async def on_unit_created(self, unit):
+    #     print(f"Unit created: {unit}")
+    #     print(f"Unit position: {unit.position}")
+    #     print("*** START RECORDING ***")
+    #     self.client.obs_move_camera(unit.position)
 
-    async def on_unit_destroyed(self, unit_tag: int):
-        print(f"Unit destroyed: {unit_tag}")
-        print("*** END RECORDING ***")
+    # async def on_unit_destroyed(self, unit_tag: int):
+    #     print(f"Unit destroyed: {unit_tag}")
+    #     print("*** END RECORDING ***")
