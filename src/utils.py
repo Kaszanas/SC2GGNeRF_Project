@@ -13,7 +13,7 @@ def find_window(title: str) -> Tuple[bool, None | Any]:
     """
     for window in pyautogui.getAllWindows():
         if title in window.title:
-            print(window)
+            print(window.title)
             return (True, window)
 
     return (False, None)

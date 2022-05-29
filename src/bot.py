@@ -31,37 +31,37 @@ class ObserverBot(ObserverAI):
         # If StarCrarft II window was still not found - look for it!
         if not self.found_window:
             self.found_window, self.window = find_window(title="StarCraft II")
-        else:
-            print("Window found")
+        # else:
+        #     print("Window found")
 
-            # Otherwise check if unit is in the center and if the recording was started
-            units = self.game_data.units
-            center_unit_id = None
-            for unit_id, unit_type_data in units.items():
-                unit_position = unit_type_data.position
-                # Checking if the unit is roughly in the center:
-                if (
-                    unit_position.x >= self.center_x - self.center_precision
-                    or unit_position.x <= self.center_x + self.center_precision
-                ) and (
-                    unit_position.y >= self.center_y - self.center_precision
-                    or unit_position.y <= +self.center_precision
-                ):
-                    center_unit_id = unit_id
+        #     # Otherwise check if unit is in the center and if the recording was started
+        #     units = self.game_data.units
+        #     center_unit_id = None
+        #     for unit_id, unit_type_data in units.items():
+        #         unit_position = unit_type_data.position
+        #         # Checking if the unit is roughly in the center:
+        #         if (
+        #             unit_position.x >= self.center_x - self.center_precision
+        #             or unit_position.x <= self.center_x + self.center_precision
+        #         ) and (
+        #             unit_position.y >= self.center_y - self.center_precision
+        #             or unit_position.y <= +self.center_precision
+        #         ):
+        #             center_unit_id = unit_id
 
-            # Center camera on the unit:
-            # self.client.obs_move_camera(units[center_unit_id].position)
-            print("Centered camera")
+        # Center camera on the unit:
+        # self.client.obs_move_camera(units[center_unit_id].position)
+        # print("Centered camera")
 
-            # Start recording:
-            print("Started Recording")
+        # # Start recording:
+        # print("Started Recording")
 
-    # async def on_unit_created(self, unit):
-    #     print(f"Unit created: {unit}")
-    #     print(f"Unit position: {unit.position}")
-    #     print("*** START RECORDING ***")
-    #     self.client.obs_move_camera(unit.position)
+    async def on_unit_created(self, unit):
+        print(f"Unit created: {unit}")
+        print(f"Unit position: {unit.position}")
+        print("*** START RECORDING ***")
+        self.client.obs_move_camera(unit.position)
 
-    # async def on_unit_destroyed(self, unit_tag: int):
-    #     print(f"Unit destroyed: {unit_tag}")
-    #     print("*** END RECORDING ***")
+    async def on_unit_destroyed(self, unit_tag: int):
+        print(f"Unit destroyed: {unit_tag}")
+        print("*** END RECORDING ***")
