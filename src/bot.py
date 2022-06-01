@@ -68,6 +68,8 @@ class ObserverBot(ObserverAI):
                     # self.window.maximize()
 
                 # os.run("python helper_rotate.py")
+                self.recording_started = True
+                print("*** START RECORDING ***")
                 await asyncio.sleep(5)
                 pyautogui.keyDown("ctrl")
                 pyautogui.press("f")
@@ -75,12 +77,8 @@ class ObserverBot(ObserverAI):
                 # TODO: Hold insert before starting recording to rotate camera:
 
                 # self.client.move_camera_spatial(self.unit_alive_center.position)
-
                 # Add unit to list of recorded units and start recording
                 self.units_recorded.append(units_close_to_center)
-                self.recording_started = True
-                print("*** START RECORDING ***")
-
                 # TODO: Press Del button to rotate camera:
 
             # Stop recording -> No units close to center
