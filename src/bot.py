@@ -3,8 +3,13 @@ from sc2.observer_ai import ObserverAI
 
 from utils import find_window
 
+import keyboard
+
 import pyautogui
-import win32gui, win32con
+
+from src.ffmpeg_utils import record_vid
+
+# import win32gui, win32con
 
 
 class ObserverBot(ObserverAI):
@@ -18,18 +23,12 @@ class ObserverBot(ObserverAI):
     async def rec_func(self):
         print("Rec_Func")
 
-        # TODO: Focus on SC2 window
+        # Wait for the user to confirm that the unit is selected:
+        while True:
+            if keyboard.is_pressed("h"):
+                break
 
-        win32gui.ShowWindow(self.window._hWnd, win32con.SW_MAXIMIZE)
-        win32gui.SetForegroundWindow(self.window._hWnd)
-
-        input("Is the unit selected?")
-
-        win32gui.ShowWindow(self.window._hWnd, win32con.SW_MAXIMIZE)
-        win32gui.SetForegroundWindow(self.window._hWnd)
-        # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
-        # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
-
+        # Center on the unit:
         pyautogui.keyDown("ctrl")
         pyautogui.press("f")
         pyautogui.keyUp("ctrl")
@@ -38,19 +37,19 @@ class ObserverBot(ObserverAI):
 
         # await asyncio.sleep(2)
 
-        # TODO: Hold insert before starting recording to rotate camera:
+        # Rotate camera counterclockwise by 45 degrees:
         pyautogui.keyDown("insert")
 
-        # TODO: Start rec
+        # Wait for the camera to move to the right spot:
 
-        # TODO: keyUp("HOLD")
+        # Start recording:
 
-        # TODO: Hold Del button to rotate camera:
+        # Rotate camera clockwise by 90 degrees:
         pyautogui.keyDown("del")
         pyautogui.keyUp("insert")
 
         # TODO: press END / zoom
-        # TODO:
+
         pyautogui.keyUp("del")
 
         print("Rec_OFF")
@@ -94,6 +93,7 @@ class ObserverBot(ObserverAI):
                 units_close_to_center.exists
                 and not self.recording_started
                 and units_close_to_center not in self.units_recorded
+                and iteration % 22 == 0
             ):
                 print("Unit created close to center...")
                 # print(units_close_to_center)
