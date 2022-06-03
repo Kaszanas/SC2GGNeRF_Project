@@ -4,7 +4,6 @@ from sc2.observer_ai import ObserverAI
 from utils import find_window
 
 import pyautogui
-import pywinauto
 import win32gui, win32con
 
 
@@ -21,39 +20,38 @@ class ObserverBot(ObserverAI):
 
         # TODO: Focus on SC2 window
 
-        input("Is the unit selected?")
-
-        await asyncio.sleep(1)
-
-        #if not self.window.isActive:
-            # hwnd = win32gui.GetForegroundWindow()
         win32gui.ShowWindow(self.window._hWnd, win32con.SW_MAXIMIZE)
         win32gui.SetForegroundWindow(self.window._hWnd)
 
-        # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
-        
-        print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
+        input("Is the unit selected?")
 
-        await asyncio.sleep(2)
+        win32gui.ShowWindow(self.window._hWnd, win32con.SW_MAXIMIZE)
+        win32gui.SetForegroundWindow(self.window._hWnd)
+        # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
+        # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
 
         pyautogui.keyDown("ctrl")
         pyautogui.press("f")
         pyautogui.keyUp("ctrl")
 
-        print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
+        # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
 
-        await asyncio.sleep(2)
+        # await asyncio.sleep(2)
 
         # TODO: Hold insert before starting recording to rotate camera:
+        pyautogui.keyDown("insert")
 
         # TODO: Start rec
 
         # TODO: keyUp("HOLD")
 
         # TODO: Hold Del button to rotate camera:
+        pyautogui.keyDown("del")
+        pyautogui.keyUp("insert")
 
         # TODO: press END / zoom
-        # TODO: 
+        # TODO:
+        pyautogui.keyUp("del")
 
         print("Rec_OFF")
 
@@ -131,7 +129,6 @@ class ObserverBot(ObserverAI):
                 self.recording_started = False
                 print(f"\nList with recorded Units: {len(self.units_recorded)} \n")
                 # print(self.units_recorded)
-
 
     async def on_enemy_unit_entered_vision(self, unit):
         # print("enemy unit spotted")
