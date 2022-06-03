@@ -5,6 +5,7 @@ from utils import find_window
 
 import pyautogui
 import pywinauto
+import win32gui, win32con
 
 
 class ObserverBot(ObserverAI):
@@ -20,22 +21,28 @@ class ObserverBot(ObserverAI):
 
         # TODO: Focus on SC2 window
 
-        if not self.window.isActive:
-            pywinauto.application.Application().connect(
-                handle=self.window._hWnd
-            ).maximize().set_focus()
-            # self.window.maximize()
+        input("Is the unit selected?")
+
+        await asyncio.sleep(1)
+
+        #if not self.window.isActive:
+            # hwnd = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(self.window._hWnd, win32con.SW_MAXIMIZE)
+        win32gui.SetForegroundWindow(self.window._hWnd)
 
         # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
         
-        pyautogui.press("f2")
         print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(2)
 
         pyautogui.keyDown("ctrl")
         pyautogui.press("f")
         pyautogui.keyUp("ctrl")
+
+        print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
+
+        await asyncio.sleep(2)
 
         # TODO: Hold insert before starting recording to rotate camera:
 
@@ -100,7 +107,7 @@ class ObserverBot(ObserverAI):
 
                 # TODO: Select Unit:
 
-                self.units.select(self.all_own_units)
+                self.all_own_units.select(self.all_own_units)
 
                 # Check if UNIT is on screen
                 # print(self.unit_alive_center.is_on_screen)
