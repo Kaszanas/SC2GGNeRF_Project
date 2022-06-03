@@ -15,6 +15,41 @@ class ObserverBot(ObserverAI):
 
     units_recorded = []
 
+    async def rec_func(self):
+        print("Rec_Func")
+
+        # TODO: Focus on SC2 window
+
+        if not self.window.isActive:
+            pywinauto.application.Application().connect(
+                handle=self.window._hWnd
+            ).maximize().set_focus()
+            # self.window.maximize()
+
+        # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
+        
+        pyautogui.press("f2")
+        print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
+
+        await asyncio.sleep(10)
+
+        pyautogui.keyDown("ctrl")
+        pyautogui.press("f")
+        pyautogui.keyUp("ctrl")
+
+        # TODO: Hold insert before starting recording to rotate camera:
+
+        # TODO: Start rec
+
+        # TODO: keyUp("HOLD")
+
+        # TODO: Hold Del button to rotate camera:
+
+        # TODO: press END / zoom
+        # TODO: 
+
+        print("Rec_OFF")
+
     async def on_start(self):
         print("Replay on_start() was called")
         # Initializing window as not found, no window handle exists:
@@ -27,7 +62,7 @@ class ObserverBot(ObserverAI):
         self.center_map = self.game_info.map_center
 
         # Center camera:
-        self.client.obs_move_camera(self.game_info.map_center)
+        # self.client.obs_move_camera(self.game_info.map_center)
 
         # Attempting to find a window that contains a specific substring:
         self.found_window, self.window = find_window(title="StarCraft II")
@@ -40,6 +75,9 @@ class ObserverBot(ObserverAI):
         if not self.found_window:
             self.found_window, self.window = find_window(title="StarCraft II")
         else:
+            # Center camera:
+            self.client.obs_move_camera(self.game_info.map_center)
+
             # Find Units close to center
             units_close_to_center = self.all_units.closer_than(
                 self.distance_from_center, self.center_map
@@ -58,22 +96,21 @@ class ObserverBot(ObserverAI):
                 print(self.unit_alive_center)
                 print(self.unit_alive_center.position)
 
+                # TODO: SELECT UNIT -> Rec_Func -> FOCUS WINDOW -> ROTATE CAMERA WITH REC -> STOP REC -> NEXT UNIT
+
                 # TODO: Select Unit:
 
-                # TODO: Hold hotkey Ctrl + F or find toggle for centering on unit:
-                if not self.window.isActive:
-                    pywinauto.application.Application().connect(
-                        handle=self.window._hWnd
-                    ).set_focus().maximize()
-                    # self.window.maximize()
+                self.units.select(self.all_own_units)
+
+                # Check if UNIT is on screen
+                # print(self.unit_alive_center.is_on_screen)
 
                 # os.run("python helper_rotate.py")
                 self.recording_started = True
                 print("*** START RECORDING ***")
-                await asyncio.sleep(5)
-                pyautogui.keyDown("ctrl")
-                pyautogui.press("f")
-                pyautogui.keyUp("ctrl")
+
+                await self.rec_func()
+
                 # TODO: Hold insert before starting recording to rotate camera:
 
                 # self.client.move_camera_spatial(self.unit_alive_center.position)
@@ -88,14 +125,18 @@ class ObserverBot(ObserverAI):
                 print(f"\nList with recorded Units: {len(self.units_recorded)} \n")
                 # print(self.units_recorded)
 
+
     async def on_enemy_unit_entered_vision(self, unit):
-        print("enemy unit spotted")
+        # print("enemy unit spotted")
+        pass
 
     async def on_enemy_unit_left_vision(self, unit):
-        print("unit_left_vision")
+        # print("unit_left_vision")
+        pass
 
     async def on_unit_took_damage(self, unit, damage):
-        print("unit took damage")
+        # print("unit took damage")
+        pass
 
     # NOT WORKING #
     # async def on_unit_created(self, unit):

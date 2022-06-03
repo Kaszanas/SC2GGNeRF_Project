@@ -11,4 +11,4 @@ if __name__ == "__main__":
         Path("./src/replays/test_replay_spawner.SC2Replay").resolve().as_posix()
     )
 
-    run_replay(ai=observer_bot, replay_path=replay_path, realtime=True)
+    run_replay(ai=observer_bot, replay_path=replay_path, realtime=True, observed_id=1)
