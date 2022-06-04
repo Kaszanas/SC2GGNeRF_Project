@@ -1,13 +1,18 @@
 import asyncio
+import os
+import sys
+import time
 from sc2.observer_ai import ObserverAI
 
-from utils import find_window
+from utils import find_window, hold_key
 
 import keyboard
 
 import pyautogui
 
-from src.ffmpeg_utils import record_vid
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from src.ffmpeg_utils import record_window
 
 # import win32gui, win32con
 
@@ -35,22 +40,45 @@ class ObserverBot(ObserverAI):
 
         # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
 
-        # await asyncio.sleep(2)
-
         # Rotate camera counterclockwise by 45 degrees:
-        pyautogui.keyDown("insert")
+        # insert = os.system("python src/hold_key.py --key 'insert' --hold_time 2")
+        # with pyautogui.hold("ctrl"):
+        #     with pyautogui.hold("f"):
+        # await hold_key(key="insert", hold_time=1)
+        with pyautogui.hold(["insert", "ctrl", "f"]):
+            # pyautogui.press("end")
+            await asyncio.sleep(1)
+        # await asyncio.sleep(1)
+
+        # print(f"Insert was held!")
 
         # Wait for the camera to move to the right spot:
 
         # Start recording:
 
         # Rotate camera clockwise by 90 degrees:
-        pyautogui.keyDown("del")
-        pyautogui.keyUp("insert")
+        # delete = await hold_key("delete", 2)
+        # insert = os.system("python src/hold_key.py --key 'delete' --hold_time 2")
+        # with pyautogui.hold("ctrl"):
+        #     with pyautogui.hold("f"):
+        with pyautogui.hold(["delete", "ctrl", "f"]):
+            # pyautogui.press("end")
+            await asyncio.sleep(1)
+        # await hold_key(key="delete", hold_time=1)
+
+        with pyautogui.hold(["insert", "ctrl", "f"]):
+            pyautogui.press("end")
+            await asyncio.sleep(1)
+
+        with pyautogui.hold(["delete", "ctrl", "f"]):
+            # pyautogui.press("end")
+            await asyncio.sleep(1)
+
+        pyautogui.press("end")
+        # await asyncio.sleep(1)
+        # print("Delete was held!")
 
         # TODO: press END / zoom
-
-        pyautogui.keyUp("del")
 
         print("Rec_OFF")
 
@@ -104,8 +132,7 @@ class ObserverBot(ObserverAI):
                 # TODO: SELECT UNIT -> Rec_Func -> FOCUS WINDOW -> ROTATE CAMERA WITH REC -> STOP REC -> NEXT UNIT
 
                 # TODO: Select Unit:
-
-                self.all_own_units.select(self.all_own_units)
+                # self.all_own_units.select(self.all_own_units)
 
                 # Check if UNIT is on screen
                 # print(self.unit_alive_center.is_on_screen)
