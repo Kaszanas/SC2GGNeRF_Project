@@ -1,20 +1,18 @@
 import asyncio
 import os
+import subprocess
 import sys
 import time
 from sc2.observer_ai import ObserverAI
 
 from utils import find_window, hold_key
-
-import keyboard
-
 import pyautogui
+import keyboard
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 from src.ffmpeg_utils import record_window
 
-# import win32gui, win32con
 
 
 class ObserverBot(ObserverAI):
@@ -26,7 +24,10 @@ class ObserverBot(ObserverAI):
     units_recorded = []
 
     async def rec_func(self):
-        print("Rec_Func")
+        # print("Rec_Func")
+
+        # TODO: Improved camera control, now when zooming in on a unit it moves out of the camera area
+        # TODO: get rid of: 1) health bar, 2) HUD
 
         # Wait for the user to confirm that the unit is selected:
         while True:
@@ -46,15 +47,11 @@ class ObserverBot(ObserverAI):
         #     with pyautogui.hold("f"):
         # await hold_key(key="insert", hold_time=1)
         with pyautogui.hold(["insert", "ctrl", "f"]):
-            # pyautogui.press("end")
-            await asyncio.sleep(1)
-        # await asyncio.sleep(1)
-
-        # print(f"Insert was held!")
-
-        # Wait for the camera to move to the right spot:
+            await asyncio.sleep(2)
+        # Wait for the camera to move to the right spot
 
         # Start recording:
+        record_window("StarCraft II", "".join(["./rec/", self.unit_alive_center.name, "/"]), "".join([self.unit_alive_center.name, "_video",".mkv"]), "", "", "")
 
         # Rotate camera clockwise by 90 degrees:
         # delete = await hold_key("delete", 2)
@@ -62,25 +59,25 @@ class ObserverBot(ObserverAI):
         # with pyautogui.hold("ctrl"):
         #     with pyautogui.hold("f"):
         with pyautogui.hold(["delete", "ctrl", "f"]):
-            # pyautogui.press("end")
             await asyncio.sleep(1)
         # await hold_key(key="delete", hold_time=1)
 
+        # Zoom to get another angle on unit
         with pyautogui.hold(["insert", "ctrl", "f"]):
             pyautogui.press("end")
             await asyncio.sleep(1)
 
+        # Rotate camera counterclockwise by 90 degrees:
         with pyautogui.hold(["delete", "ctrl", "f"]):
-            # pyautogui.press("end")
             await asyncio.sleep(1)
 
         pyautogui.press("end")
-        # await asyncio.sleep(1)
-        # print("Delete was held!")
+        await asyncio.sleep(2)
 
-        # TODO: press END / zoom
-
+        # Kill FFMPEG process --> recordings in 'rec\{unit.name}' folder (.mkv)
         print("Rec_OFF")
+        subprocess.run( f"""taskkill /im ffmpeg.exe /t /f""")
+
 
     async def on_start(self):
         print("Replay on_start() was called")
@@ -93,7 +90,7 @@ class ObserverBot(ObserverAI):
         self.distance_from_center = 10
         self.center_map = self.game_info.map_center
 
-        # Center camera:
+        # Center camera --> not working:
         # self.client.obs_move_camera(self.game_info.map_center)
 
         # Attempting to find a window that contains a specific substring:
@@ -124,28 +121,15 @@ class ObserverBot(ObserverAI):
                 and iteration % 22 == 0
             ):
                 print("Unit created close to center...")
-                # print(units_close_to_center)
                 self.unit_alive_center = units_close_to_center[0]
                 print(self.unit_alive_center)
                 print(self.unit_alive_center.position)
 
-                # TODO: SELECT UNIT -> Rec_Func -> FOCUS WINDOW -> ROTATE CAMERA WITH REC -> STOP REC -> NEXT UNIT
-
-                # TODO: Select Unit:
-                # self.all_own_units.select(self.all_own_units)
-
-                # Check if UNIT is on screen
-                # print(self.unit_alive_center.is_on_screen)
-
                 # os.run("python helper_rotate.py")
                 self.recording_started = True
                 print("*** START RECORDING ***")
-
                 await self.rec_func()
 
-                # TODO: Hold insert before starting recording to rotate camera:
-
-                # self.client.move_camera_spatial(self.unit_alive_center.position)
                 # Add unit to list of recorded units and start recording
                 self.units_recorded.append(units_close_to_center)
                 # TODO: Press Del button to rotate camera:
