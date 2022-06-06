@@ -2,17 +2,15 @@ import asyncio
 import os
 import subprocess
 import sys
-import time
 from sc2.observer_ai import ObserverAI
 
-from utils import find_window, hold_key
+from utils import find_window
 import pyautogui
 import keyboard
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 from src.ffmpeg_utils import record_window
-
 
 
 class ObserverBot(ObserverAI):
@@ -42,22 +40,21 @@ class ObserverBot(ObserverAI):
         # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
 
         # Rotate camera counterclockwise by 45 degrees:
-        # insert = os.system("python src/hold_key.py --key 'insert' --hold_time 2")
-        # with pyautogui.hold("ctrl"):
-        #     with pyautogui.hold("f"):
-        # await hold_key(key="insert", hold_time=1)
         with pyautogui.hold(["insert", "ctrl", "f"]):
             await asyncio.sleep(2)
         # Wait for the camera to move to the right spot
 
-        # Start recording:
-        record_window("StarCraft II", "".join(["./rec/", self.unit_alive_center.name, "/"]), "".join([self.unit_alive_center.name, "_video",".mkv"]), "", "", "")
+        # Recording window starts here:
+        record_window(
+            name="StarCraft II",
+            output_path="".join(["./rec/", self.unit_alive_center.name, "/"]),
+            filename="".join([self.unit_alive_center.name, "_video", ".mkv"]),
+            video_suffix="",
+            video_prefix="",
+            resolution="",
+        )
 
         # Rotate camera clockwise by 90 degrees:
-        # delete = await hold_key("delete", 2)
-        # insert = os.system("python src/hold_key.py --key 'delete' --hold_time 2")
-        # with pyautogui.hold("ctrl"):
-        #     with pyautogui.hold("f"):
         with pyautogui.hold(["delete", "ctrl", "f"]):
             await asyncio.sleep(1)
         # await hold_key(key="delete", hold_time=1)
@@ -76,8 +73,7 @@ class ObserverBot(ObserverAI):
 
         # Kill FFMPEG process --> recordings in 'rec\{unit.name}' folder (.mkv)
         print("Rec_OFF")
-        subprocess.run( f"""taskkill /im ffmpeg.exe /t /f""")
-
+        subprocess.run(f"""taskkill /im ffmpeg.exe /t /f""")
 
     async def on_start(self):
         print("Replay on_start() was called")
