@@ -1,0 +1,3 @@
+[submodule ".\\src\\HashNeRF-pytorch"]
+	path = .\\src\\HashNeRF-pytorch
+	url = https://github.com/Kaszanas/HashNeRF-pytorch.git
