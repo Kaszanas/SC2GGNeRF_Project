@@ -2,11 +2,11 @@ import os
 import sys
 from sc2.observer_ai import ObserverAI
 
-from utils import find_window
+from src.recorder.utils import find_window
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
-from src.ffmpeg_utils import rec_func
+from src.recorder.ffmpeg_utils import rec_func
 
 
 class ObserverBot(ObserverAI):
