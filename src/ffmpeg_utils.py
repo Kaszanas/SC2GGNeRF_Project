@@ -39,9 +39,8 @@ def record_window(
     )
 
     async def rec_func():
-        # print("Rec_Func")
 
-        # TODO: Improved camera control, now when zooming in on a unit it moves out of the camera area
+        # TODO: Improve camera control, now when zooming in on a unit it moves out of the camera area
         # TODO: get rid of: 1) health bar, 2) HUD
 
         # Wait for the user to confirm that the unit is selected:
@@ -54,14 +53,12 @@ def record_window(
         pyautogui.press("f")
         pyautogui.keyUp("ctrl")
 
-        # print(f"Unit on screen? = {self.unit_alive_center.is_on_screen}")
-
         # Rotate camera counterclockwise by 45 degrees:
         with pyautogui.hold(["insert", "ctrl", "f"]):
+            # Wait for the camera to move to the right spot
             await asyncio.sleep(2)
-        # Wait for the camera to move to the right spot
 
-        # Recording window starts here:
+        # Start recording the window:
         record_window(
             name="StarCraft II",
             output_path="".join(["./rec/", self.unit_alive_center.name, "/"]),
@@ -74,7 +71,6 @@ def record_window(
         # Rotate camera clockwise by 90 degrees:
         with pyautogui.hold(["delete", "ctrl", "f"]):
             await asyncio.sleep(1)
-        # await hold_key(key="delete", hold_time=1)
 
         # Zoom to get another angle on unit
         with pyautogui.hold(["insert", "ctrl", "f"]):
