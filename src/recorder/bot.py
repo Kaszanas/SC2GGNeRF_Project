@@ -64,7 +64,7 @@ class ObserverBot(ObserverAI):
 
                 self.recording_started = True
                 print("*** START RECORDING ***")
-                await rec_func()
+                await rec_func(unit_name=self.unit_alive_center.name)
 
                 # Add unit to list of recorded units and start recording:
                 self.units_recorded.append(units_close_to_center)
