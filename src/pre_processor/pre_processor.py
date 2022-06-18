@@ -1,7 +1,13 @@
 from pathlib import Path
+import subprocess
+from typing import Tuple
 
 
-def crop_video(video_filepath: Path, output_dir: Path) -> Path:
+def crop_video(
+    video_filepath: Path,
+    output_dir: Path,
+    output_extension: str = ".mkv",
+) -> Tuple[bool, Path]:
     """
     Helper method that crops a single video with some settings using FFMPEG
 
@@ -13,7 +19,29 @@ def crop_video(video_filepath: Path, output_dir: Path) -> Path:
     :rtype: Path
     """
 
-    return Path()
+    # ffmpeg -i .\BroodLord_video.mkv -vf "crop=1050:800:out_w/2-186:0" BroodLord_video_cropped.mkv
+
+    output_filepath = Path(
+        output_dir, video_filepath.name, "_cropped", output_extension
+    )
+
+    commands = [
+        "ffmpeg",
+        "-i",
+        video_filepath.resolve().as_posix(),
+        "-vf",
+        '"crop=1050:800:out_w/2-186:0"',
+        output_filepath.resolve().as_posix(),
+    ]
+
+    # TODO: Need better error handling here!
+    if subprocess.run(commands).returncode == 0:
+        print(f"Successfully cropped {video_filepath.name}")
+    else:
+        print(f"Failed to crop {video_filepath.name}")
+        return False, Path("")
+
+    return True, output_filepath
 
 
 def export_frames() -> Path:
@@ -38,6 +66,15 @@ def pre_process_videos(input_dir: Path, input_extension: str = ".mkv"):
             # Name of the member should correspond to the
             # name of the video that is going to be processed:
             video_file = Path(member, member.name, input_extension)
+            output_dir = Path(member, member.name, "_cropped")
 
-            crop_video(video_filepath=video_file)
-            export_frames()
+            # Cropping the video:
+            ok_crop, crop_output = crop_video(
+                video_filepath=video_file,
+                output_dir=output_dir,
+                output_extension=input_extension,
+            )
+
+            # Cannot export frames if the video was not cropped:
+            if ok_crop:
+                export_frames()
