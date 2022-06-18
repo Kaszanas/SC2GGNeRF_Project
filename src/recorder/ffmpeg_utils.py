@@ -52,7 +52,7 @@ def record_window(
         Path(output_path, video_prefix, filename, video_suffix).resolve().as_posix()
     )
 
-    subprocess.Popen(
+    return subprocess.Popen(
         f"""ffmpeg -y -f dshow -f gdigrab {video_size} -framerate {frame_rate} -i title={name} -vcodec libx264 -preset ultrafast -qp 0 -pix_fmt yuv444p {final_path}"""
     )
 
@@ -89,7 +89,7 @@ async def rec_func(unit_name: str):
         await asyncio.sleep(2)
 
     # Start recording the window:
-    record_window(
+    recording_process = record_window(
         name="StarCraft II",
         output_path="".join(["./rec/", unit_name, "/"]),
         filename="".join([unit_name, "_video", ".mkv"]),
@@ -116,4 +116,5 @@ async def rec_func(unit_name: str):
 
     # Kill FFMPEG process --> recordings in 'rec\{unit.name}' folder (.mkv)
     print("Rec_OFF")
-    subprocess.run(f"""taskkill /im ffmpeg.exe /t /f""")
+    recording_process.terminate()
+    # subprocess.run(f"""taskkill /im ffmpeg.exe /t /f""")
