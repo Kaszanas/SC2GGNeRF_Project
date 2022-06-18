@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 import subprocess
 from typing import Tuple
@@ -21,15 +20,18 @@ def crop_video(
     """
 
     output_filepath = Path(
-        output_dir, video_filepath.name + "_cropped" + output_extension
+        video_filepath.parent,
+        output_dir,
+        video_filepath.stem + "_cropped" + output_extension,
     )
 
     commands = [
         "ffmpeg",
         "-i",
-        video_filepath.resolve().as_posix(),
+        video_filepath.as_posix(),
         "-vf",
-        '"crop=1050:800:out_w/2-186:0"',
+        "crop=1050:800:out_w/2-186:0",
+        "-y",
         output_filepath.resolve().as_posix(),
     ]
 
@@ -61,7 +63,7 @@ def export_frames(
     :rtype: Path
     """
 
-    output_file_path = Path(output_dir, input_video.name + "%03d" + ".png")
+    output_file_path = Path(output_dir, input_video.stem + "%03d" + ".png")
 
     commands = [
         "ffmpeg",
@@ -97,12 +99,21 @@ def pre_process_videos(input_dir: Path, input_extension: str = ".mkv"):
         if member.is_dir():
             # Name of the member should correspond to the
             # name of the video that is going to be processed:
-            video_file = Path(member, member.name + input_extension)
-            crop_output_dir = Path(member, member.name + "_cropped")
+            video_file = Path(
+                input_dir,
+                member.name,
+                member.name + "_video" + input_extension,
+            ).resolve()
+            crop_output_dir = Path(
+                input_dir,
+                member.name,
+                member.name + "_cropped",
+            ).resolve()
 
             # Creating path if it does not exists:
-            if not crop_output_dir.exists():
-                os.mkdir(crop_output_dir.resolve().as_posix())
+            crop_output_dir.mkdir(parents=False, exist_ok=True)
+            # if not crop_output_dir.exists():
+            #     os.mkdir(crop_output_dir.resolve().as_posix())
 
             # Cropping the video:
             ok_crop, crop_output = crop_video(
@@ -114,10 +125,11 @@ def pre_process_videos(input_dir: Path, input_extension: str = ".mkv"):
             # Cannot export frames if the video was not cropped:
             if ok_crop:
 
-                export_frames_output_dir = Path(crop_output_dir + "_frames")
+                export_frames_output_dir = Path(
+                    crop_output_dir, member.name + "_frames"
+                )
                 # Creating path if it does not exists:
-                if not export_frames_output_dir.exists():
-                    os.mkdir(export_frames_output_dir)
+                export_frames_output_dir.mkdir(parents=False, exist_ok=True)
 
                 export_frames(
                     input_video=crop_output,
