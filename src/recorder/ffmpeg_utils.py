@@ -14,6 +14,7 @@ def record_window(
     video_prefix: str = "",
     video_suffix: str = "",
     resolution: str = "",
+    frame_rate: int = 60,
 ):
     """
     Exposes the logic for recording a selected window by the window name.
@@ -34,7 +35,6 @@ def record_window(
     :type resolution: str, optional
     """
 
-    frame_rate = 30
     video_size = ""
     name = f'"{name}"'
 
