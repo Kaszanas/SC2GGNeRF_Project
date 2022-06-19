@@ -16,3 +16,5 @@ transforms.json
 
 colmap*
 configs
+
+data/
