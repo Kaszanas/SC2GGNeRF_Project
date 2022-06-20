@@ -132,16 +132,31 @@ def pre_process_videos(
                     output_extension=input_extension,
                 )
 
-            # Cannot export frames if the video was not cropped:
-            if ok_crop and bool_export_frames:
+    for member in input_dir.iterdir():
+        if member.is_dir():
+            for nested1_member in member.iterdir():
+                if nested1_member.is_dir():
+                    # Cannot export frames if the video was not cropped:
+                    if bool_export_frames:
 
-                export_frames_output_dir = Path(
-                    crop_output_dir, member.name + "_frames"
-                )
-                # Creating path if it does not exists:
-                export_frames_output_dir.mkdir(parents=False, exist_ok=True)
+                        crop_output_dir = Path(
+                            input_dir,
+                            member.name,
+                            member.name + "_cropped",
+                        ).resolve()
 
-                export_frames(
-                    input_video=crop_output,
-                    output_dir=export_frames_output_dir,
-                )
+                        export_frames_output_dir = Path(
+                            crop_output_dir, member.name + "_frames"
+                        )
+                        # Creating path if it does not exists:
+                        export_frames_output_dir.mkdir(parents=False, exist_ok=True)
+
+                        crop_output = Path(
+                            crop_output_dir,
+                            member.name + "_video_cropped" + input_extension,
+                        )
+
+                        export_frames(
+                            input_video=crop_output,
+                            output_dir=export_frames_output_dir,
+                        )

@@ -30,7 +30,7 @@ if __name__ == "__main__":
         "--bool_export_frames",
         type=bool,
         help="Please provide if exporting frames from the video should be performed.",
-        default=False,
+        default=True,
     )
 
     args = parser.parse_args()
