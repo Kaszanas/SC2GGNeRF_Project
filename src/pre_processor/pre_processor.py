@@ -83,12 +83,21 @@ def export_frames(
 
 
 # TODO: This function could be more universal with cropping parameters:
-def pre_process_videos(input_dir: Path, input_extension: str = ".mkv"):
+def pre_process_videos(
+    input_dir: Path,
+    bool_export_frames: bool,
+    bool_crop: bool = True,
+    input_extension: str = ".mkv",
+):
     """
     Helper function that pre processes the videos with hardcoded settings
 
     :param input_dir: Specifies the input path which is a directory containing directories that hold the recordings.
     :type input_dir: Path
+    :param bool_crop: Specifies if cropping should be performed.
+    :type bool_crop: bool
+    :param bool_export_frames: Specifies if exporting frames should be performed.
+    :type bool_export_frames: Path
     :param input_extension: Specifies the extension that will be used to search for the video that is going to be processed with the cropping, defaults to ".mkv"
     :type input_extension: str, optional
     """
@@ -116,14 +125,15 @@ def pre_process_videos(input_dir: Path, input_extension: str = ".mkv"):
             #     os.mkdir(crop_output_dir.resolve().as_posix())
 
             # Cropping the video:
-            ok_crop, crop_output = crop_video(
-                video_filepath=video_file,
-                output_dir=crop_output_dir,
-                output_extension=input_extension,
-            )
+            if bool_crop:
+                ok_crop, crop_output = crop_video(
+                    video_filepath=video_file,
+                    output_dir=crop_output_dir,
+                    output_extension=input_extension,
+                )
 
             # Cannot export frames if the video was not cropped:
-            if ok_crop:
+            if ok_crop and bool_export_frames:
 
                 export_frames_output_dir = Path(
                     crop_output_dir, member.name + "_frames"
