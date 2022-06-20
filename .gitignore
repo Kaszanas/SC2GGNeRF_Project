@@ -18,3 +18,7 @@ colmap*
 configs
 
 data/
+
+*snapshot*
+
+transfroms_test.json

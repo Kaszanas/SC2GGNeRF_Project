@@ -14,7 +14,7 @@ def record_window(
     video_prefix: str = "",
     video_suffix: str = "",
     resolution: str = "",
-    frame_rate: int = 120,
+    frame_rate: int = 60,
 ):
     """
     Exposes the logic for recording a selected window by the window name.
