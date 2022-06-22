@@ -8,7 +8,7 @@ import json
 # There should be a module containing such functions.
 def save_commands_to_file(
     commands: List[str],
-    output_file: Path = Path("colmap_commands.bat"),
+    output_file: Path = Path("nerf_commands.bat"),
 ):
     """
     Helper function that saves list of commands to a file.
@@ -110,6 +110,7 @@ def prepare_transforms(input_dir: Path):
                     "cy": loaded_data["cy"],
                     "w": loaded_data["w"],
                     "h": loaded_data["h"],
+                    "aabb_scale": loaded_data["aabb_scale"],
                 }
 
                 number_of_test_frames = len(list_of_frames) // 5

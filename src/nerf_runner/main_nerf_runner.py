@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 
+from nerf_runner import prepare_nerf_commands, prepare_transforms, save_commands_to_file
 
 if __name__ == "__main__":
 
@@ -19,3 +20,13 @@ if __name__ == "__main__":
     # Getting the directory:
     input_dir = Path(args.input_dir)
     execution_dir = Path("./")
+
+    resolved_input = input_dir.resolve()
+
+    prepare_transforms(input_dir=resolved_input)
+    nerf_commands = prepare_nerf_commands(
+        input_dir=input_dir,
+        execution_dir=execution_dir,
+        testing=True,
+    )
+    save_commands_to_file(commands=nerf_commands)
