@@ -4,6 +4,24 @@ from typing import List
 import random
 import json
 
+# TODO: This is a duplicate function from colmap_runner.py.
+# There should be a module containing such functions.
+def save_commands_to_file(
+    commands: List[str],
+    output_file: Path = Path("colmap_commands.bat"),
+):
+    """
+    Helper function that saves list of commands to a file.
+
+    :param output_file: Specifies the path to the output file that will contain the commands, please note that the file will be overwriten after each execution.
+    :type output_file: Path
+    :param commands: Specifies the list of commands that will be saved to the file.
+    :type commands: List[str]
+    """
+
+    with output_file.open(mode="w") as file:
+        file.writelines(commands)
+
 
 def prepare_nerf_commands(
     input_dir: Path,
