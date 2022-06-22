@@ -1,6 +1,9 @@
 from pathlib import Path
 from typing import List
 
+import random
+import json
+
 
 def prepare_nerf_commands(
     input_dir: Path,
@@ -54,11 +57,55 @@ def prepare_nerf_commands(
 
 
 def prepare_transforms(input_dir: Path):
+    """
+    Helper that splits a single transforms.json into separate train and test sets.
 
-    # TODO: Go through all of the directories
+    :param input_dir: Specifies the input directory that contains multiple datasets within nested directories.
+    :type input_dir: Path
+    """
 
-    # Open and parse transforms.json
+    # Go through all of the directories:
+    for member in input_dir.iterdir():
+        if member.is_dir():
+            # Getting all of the paths constructed:
+            path_to_cropped_dir = Path(input_dir, member.name, member.name + "_cropped")
+            path_to_transforms = Path(path_to_cropped_dir, "transforms.json")
+            path_to_train_json = Path(path_to_cropped_dir, "train_transforms.json")
+            path_to_test_json = Path(path_to_cropped_dir, "test_transforms.json")
 
-    # Create two separate files train_transforms.json and test_transforms.json
+            # Open and parse transforms.json:
+            with path_to_transforms.open("r") as transforms:
+                loaded_data = json.load(transforms)
 
-    pass
+                list_of_frames = loaded_data["frames"]
+
+                copy_data = {
+                    "camera_angle_x": loaded_data["camera_angle_x"],
+                    "camera_angle_y": loaded_data["camera_angle_y"],
+                    "fl_x": loaded_data["fl_x"],
+                    "fl_y": loaded_data["fl_y"],
+                    "k1": loaded_data["k1"],
+                    "k2": loaded_data["k2"],
+                    "p1": loaded_data["p1"],
+                    "p2": loaded_data["p2"],
+                    "cx": loaded_data["cx"],
+                    "cy": loaded_data["cy"],
+                    "w": loaded_data["w"],
+                    "h": loaded_data["h"],
+                }
+
+                number_of_test_frames = len(list_of_frames) // 5
+                test_frames = []
+                for _ in range(number_of_test_frames):
+                    random_test_frame = list_of_frames.pop(
+                        random.randrange(len(list_of_frames))
+                    )
+                    test_frames.append(random_test_frame)
+
+                # Creating and saving separate train and test files:
+                with path_to_train_json.open("w") as train_file:
+                    copy_data["frames"] = list_of_frames
+                    json.dump(copy_data, train_file)
+                with path_to_test_json.open("w") as test_file:
+                    copy_data["frames"] = test_frames
+                    json.dump(copy_data, test_file)
