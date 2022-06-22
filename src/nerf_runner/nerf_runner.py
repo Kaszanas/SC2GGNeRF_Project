@@ -56,18 +56,22 @@ def prepare_nerf_commands(
             path_to_cropped_dir = Path(input_dir, member.name, member.name + "_cropped")
             path_to_train_json = Path(path_to_cropped_dir, "train_transforms.json")
             path_to_test_json = Path(path_to_cropped_dir, "test_transforms.json")
-            path_to_snapshot = Path(path_to_cropped_dir, f"train_test_{member.name}")
+            path_to_snapshot = Path(
+                path_to_cropped_dir, f"train_test_{member.name}.msgpack"
+            )
             nerf_runner_path = Path(
                 execution_dir, "src", "instant-ngp", "scripts", "run.py"
             )
 
             # Standard command for training the model:
-            command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}"'
+            command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}"; '
 
             # For testing the command looks differently:
             if testing:
-                path_to_snapshot = Path(path_to_cropped_dir, f"train_{member.name}")
-                command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --test_transforms {path_to_test_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}";'
+                path_to_snapshot = Path(
+                    path_to_cropped_dir, f"train_{member.name}.msgpack"
+                )
+                command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --test_transforms {path_to_test_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}"; '
 
             all_commands.append(command)
 
@@ -124,7 +128,7 @@ def prepare_transforms(input_dir: Path):
                 # Creating and saving separate train and test files:
                 with path_to_train_json.open("w") as train_file:
                     copy_data["frames"] = list_of_frames
-                    json.dump(copy_data, train_file)
+                    json.dump(copy_data, train_file, indent=4)
                 with path_to_test_json.open("w") as test_file:
                     copy_data["frames"] = test_frames
-                    json.dump(copy_data, test_file)
+                    json.dump(copy_data, test_file, indent=4)

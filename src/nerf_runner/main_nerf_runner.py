@@ -17,13 +17,20 @@ if __name__ == "__main__":
     parser.add_argument(
         "--testing",
         type=bool,
-        help="Please provide a path to the directory that contains directories that hold the videos.",
+        help="Please provide information if the NeRF will also test against some transforms.json.",
         default=True,
+    )
+    parser.add_argument(
+        "--n_steps",
+        type=int,
+        help="Please provide number of training steps.",
+        default=500,
     )
 
     args = parser.parse_args()
 
     testing_bool = args.testing
+    n_steps = args.n_steps
 
     # Getting the directory:
     input_dir = Path(args.input_dir)
@@ -36,5 +43,6 @@ if __name__ == "__main__":
         input_dir=input_dir,
         execution_dir=execution_dir,
         testing=testing_bool,
+        n_steps=n_steps,
     )
     save_commands_to_file(commands=nerf_commands)
