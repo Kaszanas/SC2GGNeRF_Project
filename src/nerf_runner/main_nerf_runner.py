@@ -14,8 +14,16 @@ if __name__ == "__main__":
         help="Please provide a path to the directory that contains directories that hold the videos.",
         default="./rec",
     )
+    parser.add_argument(
+        "--testing",
+        type=bool,
+        help="Please provide a path to the directory that contains directories that hold the videos.",
+        default=True,
+    )
 
     args = parser.parse_args()
+
+    testing_bool = args.testing
 
     # Getting the directory:
     input_dir = Path(args.input_dir)
@@ -27,6 +35,6 @@ if __name__ == "__main__":
     nerf_commands = prepare_nerf_commands(
         input_dir=input_dir,
         execution_dir=execution_dir,
-        testing=True,
+        testing=testing_bool,
     )
     save_commands_to_file(commands=nerf_commands)
