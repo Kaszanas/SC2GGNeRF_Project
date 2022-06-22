@@ -40,8 +40,6 @@ if __name__ == "__main__":
 
     # Getting the directory:
     input_dir = Path(args.input_dir)
-    test = input_dir.resolve().as_posix()
-
     input_ext = args.input_ext
 
     pre_process_videos(
