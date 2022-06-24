@@ -25,3 +25,5 @@ transfroms_test.json
 
 *.json
 *.bat
+
+rec/

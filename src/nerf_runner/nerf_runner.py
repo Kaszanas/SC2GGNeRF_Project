@@ -64,14 +64,14 @@ def prepare_nerf_commands(
             )
 
             # Standard command for training the model:
-            command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}"; '
+            command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --n_steps {n_steps} --save_snapshot {path_to_snapshot.as_posix()} --mode "nerf"; '
 
             # For testing the command looks differently:
             if testing:
                 path_to_snapshot = Path(
                     path_to_cropped_dir, f"train_{member.name}.msgpack"
                 )
-                command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --test_transforms {path_to_test_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}"; '
+                command = f'python {nerf_runner_path.as_posix()} --scene {path_to_train_json.as_posix()} --test_transforms {path_to_test_json.as_posix()} --n_steps {n_steps} --save_snapshot "{path_to_snapshot.as_posix()}" --mode "nerf"; '
 
             all_commands.append(command)
 

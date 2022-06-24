@@ -24,7 +24,7 @@ if __name__ == "__main__":
         "--n_steps",
         type=int,
         help="Please provide number of training steps.",
-        default=500,
+        default=400,
     )
 
     args = parser.parse_args()
