@@ -27,3 +27,5 @@ Command that was used to crop the videos:
 ```
 ffmpeg -i .\BroodLord_video.mkv -vf "crop=1050:800:out_w/2-186:0" BroodLord_video_cropped.mkv
 ```
+
+Please note that this repository is still under development and does not contain production grade code.
