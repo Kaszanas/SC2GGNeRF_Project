@@ -4,6 +4,3 @@
 [submodule ".\\src\\instant-ngp"]
 	path = .\\src\\instant-ngp
 	url = https://github.com/Kaszanas/instant-ngp.git
-[submodule ".\\src\\plenoctree"]
-	path = .\\src\\plenoctree
-	url = https://github.com/sxyu/plenoctree.git
