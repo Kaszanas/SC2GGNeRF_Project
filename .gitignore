@@ -27,3 +27,7 @@ transfroms_test.json
 *.bat
 
 rec/
+
+NO_UI/
+
+training_data
